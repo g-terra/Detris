@@ -1,0 +1,87 @@
+- You are an expert in TypeScript, Node.js, React, Shadcn UI, Tailwind, and Framer Motion.
+
+- **Important:** The backend implementation will be developed separately using Java in a dedicated repository. Do not use Next.js for backend logic.
+
+- **Code Style and Structure**
+
+  - Write concise, technical TypeScript code with accurate examples.
+  - Use functional and declarative programming patterns; avoid classes.
+  - Prefer iteration and modularization over code duplication.
+  - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+  - Structure files: exported component, subcomponents, helpers, static content, types.
+
+- **Testing**
+
+  - Follow Test-Driven Development (TDD) approach:
+    - Write failing tests first (Red phase)
+    - Write minimal code to pass tests (Green phase)
+    - Refactor code while keeping tests green (Refactor phase)
+
+  - Use Vitest and React Testing Library as primary testing tools:
+    - Leverage Vitest's fast, native ESM-based runner
+    - Use `test` and `expect` from Vitest
+    - Take advantage of Vitest's watch mode for TDD
+    - Utilize Vitest's built-in coverage reporting
+    - Use `vi.mock()` for mocking dependencies
+
+- **Naming Conventions**
+
+  - All components should go in src/components and be named like new-component.tsx
+  - Use lowercase with dashes for directories (e.g., components/auth-wizard).
+  - Favor named exports for components.
+
+- **TypeScript Usage**
+
+  - Use TypeScript for all code; prefer interfaces over types.
+  - Avoid enums; use maps instead.
+  - Use functional components with TypeScript interfaces.
+
+- **Syntax and Formatting**
+
+  - Use the "function" keyword for pure functions.
+  - Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
+  - Use declarative JSX.
+
+- **UI and Styling**
+
+  - Use Shadcn UI and Tailwind for components and styling.
+  - Implement responsive design with Tailwind CSS; use a mobile-first approach.
+
+- **Performance Optimization**
+
+  - Minimize 'useEffect', and 'setState'; prefer pure functional patterns.
+  - Optimize images: use WebP format, include size data, implement lazy loading.
+
+- **Key Conventions**
+
+  - Use 'nuqs' for URL search parameter state management.
+  - Optimize Web Vitals (LCP, CLS, FID).
+  - Structure your application clearly in the /src directory, separating components and pages.
+
+## Components Organization
+
+Within the /src/components folder, consider organizing components by type or feature:
+
+- **By Type:** Group components like forms, buttons, layout elements, etc.
+- **By Feature:** For larger applications, group components related to specific features or domains
+
+Example:
+
+```
+/src/components
+├── /ui
+│   ├── /Button
+│   ├── /Modal
+│   └── /Card
+├── /forms
+│   ├── /TextField
+│   └── /Select
+└── /layout
+    ├── /Navbar
+    └── /Footer
+```
+
+- **Private Components:** For components used only within specific pages, you can create a `_components` folder within the relevant `/src/pages` subdirectory.
+- **Shared Components:** The `/src/components` folder should contain reusable components used across multiple pages or features.
+- **Modular Approach:** Adopt a modular structure, where each feature or domain has its own folder containing components, hooks, and utilities specific to that feature.
+
