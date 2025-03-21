@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'gameboy-green': '#DFFFD6', // A light green background reminiscent of Game Boy
+        'gameboy-green': '#9bbc0f', // A light green background reminiscent of Game Boy
       },
       fontFamily: {
         retro: ['"Press Start 2P"', 'monospace'], // Retro, pixelated look

@@ -1,25 +1,20 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Layout from '@components/layout/Layout';
+import React, { useEffect } from 'react';
+import { usePageTitle } from '@contexts/PageTitleContext';
 
 const GamePage: React.FC = () => {
-    const navigate = useNavigate();
-    
+    const { setTitle } = usePageTitle();
+
+    useEffect(() => {
+        setTitle('Game');
+    }, [setTitle]);
+
     return (
-      <Layout>
-      {/* Return Button Positioned at the Top-Left */}
-      <button
-        className="absolute top-4 left-4 px-4 py-2 border-2 border-gray-800 rounded hover:bg-gray-800 hover:text-white transition"
-        onClick={() => navigate('/')}
-      >
-        Back to Menu
-      </button>
-      <h2 className="text-3xl mb-4">Game Page</h2>
-      {/* Placeholder for the Tetris grid, next shape preview, score panel, etc. */}
-      <div className="w-full max-w-md bg-white p-4 rounded shadow">
-        <p className="text-center text-gray-700">Game Grid Placeholder</p>
-      </div>
-    </Layout>
+      <>
+        {/* Placeholder for the Tetris grid, next shape preview, score panel, etc. */}
+        <div className="w-full max-w-md bg-white p-4 rounded shadow">
+          <p className="text-center text-gray-700">Game Grid Placeholder</p>
+        </div>
+      </>
     );
 }
 

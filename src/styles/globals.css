@@ -5,5 +5,5 @@
 
 /* Global retro styling */
 body {
-  @apply bg-gameboy-green text-gray-800 font-retro;
+  @apply bg-gameboy-green text-gray-900 font-retro;
 }
