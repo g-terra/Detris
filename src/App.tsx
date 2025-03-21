@@ -1,14 +1,19 @@
 import './styles/globals.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainMenuPage from '@pages/MainMenuPage';
+import GamePage from '@pages/GamePage';
+import DebugPage from '@pages/DebugPage';
 
 function App() {
   return (
-    <main className="min-h-screen bg-background">
-      <div className="container py-8">
-        <h1 className="text-4xl font-bold text-foreground mb-8">Detris</h1>
-        {/* Game components will be added here */}
-      </div>
-    </main>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainMenuPage />} />
+        <Route path="/game" element={<GamePage />} />
+        <Route path="/debug" element={<DebugPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App
