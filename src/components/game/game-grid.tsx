@@ -1,9 +1,9 @@
 import { GAME_COLORS } from "@/lib/constants/colors"
 import { cn } from "@/lib/utils"
-import { Tetrimino, Position } from "@/lib/tetris/types"
+import { Tetrimino } from "@/lib/tetris/types"
 import { TETRIMINO_COLORS } from "@/lib/tetris/constants"
 import { rotateTetrimino } from "@/lib/tetris/rotation"
-import { getGhostPiecePosition, getTetriminoPositions } from "@/lib/tetris/collision"
+import { getGhostPiecePosition } from "@/lib/tetris/collision"
 
 interface GameGridProps {
   className?: string
@@ -27,6 +27,7 @@ export function GameGrid({
       <div
         key={`${x}-${y}`}
         className="w-[30px] h-[30px] border border-gray-700"
+        data-testid="grid-cell"
       />
     ))
   )
@@ -48,9 +49,18 @@ export function GameGrid({
         backgroundColor: GAME_COLORS.background,
         borderColor: GAME_COLORS.text
       }}
+      data-testid="game-grid"
     >
       {/* Grid cells */}
-      {gridCells}
+      {gridCells.map((row, y) => 
+        row.map((cell, x) => (
+          <div
+            key={`${x}-${y}`}
+            className="w-[30px] h-[30px] border border-gray-700"
+            data-testid="grid-cell"
+          />
+        ))
+      )}
 
       {/* Ghost piece */}
       {showGhost && ghostPiece && rotateTetrimino(ghostPiece.shape, ghostPiece.rotation).flatMap((row, y) =>
@@ -64,6 +74,7 @@ export function GameGrid({
                 left: `${(x + ghostPiece.position.x) * 30}px`,
                 top: `${(y + ghostPiece.position.y) * 30}px`
               }}
+              data-testid="ghost-block"
             />
           ) : null
         )
@@ -81,6 +92,7 @@ export function GameGrid({
                 left: `${(x + currentPiece.position.x) * 30}px`,
                 top: `${(y + currentPiece.position.y) * 30}px`
               }}
+              data-testid="piece-block"
             />
           ) : null
         )
@@ -98,6 +110,7 @@ export function GameGrid({
                 left: `${x * 30}px`,
                 top: `${y * 30}px`
               }}
+              data-testid="piece-block"
             />
           ) : null
         )

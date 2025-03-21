@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { TetriminoState, TetriminoType, TETRIMINO_COLORS } from '../../lib/tetris/types';
-import { createTetrimino, getNextRotation, moveTetrimino } from '../../lib/tetris/tetriminos';
+import { TetriminoState } from '../../lib/tetris/types';
+import { createTetrimino, moveTetrimino, getRandomTetriminoType } from '../../lib/tetris/factory';
+import { getNextRotation } from '../../lib/tetris/rotation';
 import { PLAYFIELD_HEIGHT, PLAYFIELD_WIDTH, canMove, canRotate } from '../../lib/tetris/validation';
 
 const CELL_SIZE = 30; // pixels
@@ -14,21 +15,12 @@ export function TetrisDebugView({ isDebugMode = true }: TetrisDebugViewProps) {
     Array(PLAYFIELD_HEIGHT).fill(null).map(() => Array(PLAYFIELD_WIDTH).fill(0))
   );
   const [activePiece, setActivePiece] = useState<TetriminoState | null>(null);
-  const [score, setScore] = useState(0);
 
   // Spawn a random piece
   const spawnPiece = useCallback(() => {
-    const types = Object.values(TetriminoType);
-    const randomType = types[Math.floor(Math.random() * types.length)] as TetriminoType;
+    const randomType = getRandomTetriminoType();
     setActivePiece(createTetrimino(randomType));
   }, []);
-
-  // Auto-spawn piece in play mode
-  useEffect(() => {
-    if (!isDebugMode && !activePiece) {
-      spawnPiece();
-    }
-  }, [isDebugMode, activePiece, spawnPiece]);
 
   // Handle keyboard controls
   useEffect(() => {
@@ -49,9 +41,6 @@ export function TetrisDebugView({ isDebugMode = true }: TetrisDebugViewProps) {
         case 'ArrowDown':
           if (canMove(activePiece, { x: 0, y: 1 }, playfield)) {
             setActivePiece(moveTetrimino(activePiece, { x: 0, y: 1 }));
-            if (!isDebugMode) {
-              setScore(prev => prev + 1); // Score for soft drop
-            }
           }
           break;
         case ' ': // Space bar
@@ -76,33 +65,13 @@ export function TetrisDebugView({ isDebugMode = true }: TetrisDebugViewProps) {
           }
           setPlayfield(newPlayfield);
           setActivePiece(null);
-
-          // Check for completed lines
-          let completedLines = 0;
-          const updatedPlayfield = newPlayfield.filter(row => {
-            if (row.every(cell => cell === 1)) {
-              completedLines++;
-              return false;
-            }
-            return true;
-          });
-
-          // Add new empty lines at the top
-          while (updatedPlayfield.length < PLAYFIELD_HEIGHT) {
-            updatedPlayfield.unshift(Array(PLAYFIELD_WIDTH).fill(0));
-          }
-
-          if (completedLines > 0) {
-            setPlayfield(updatedPlayfield);
-            setScore(prev => prev + (completedLines * 100)); // Basic scoring
-          }
           break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activePiece, playfield, isDebugMode]);
+  }, [activePiece, playfield]);
 
   // Render the grid
   const renderGrid = () => {
@@ -143,24 +112,12 @@ export function TetrisDebugView({ isDebugMode = true }: TetrisDebugViewProps) {
   };
 
   return (
-    <div className={isDebugMode ? 'p-8' : 'p-4'}>
-      {isDebugMode && (
-        <div className="mb-4">
-          <button
-            onClick={spawnPiece}
-            disabled={!!activePiece}
-            className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400"
-          >
-            Spawn Piece
-          </button>
-        </div>
-      )}
+    <div className="p-8">
       <div className="flex gap-8">
         <div className="border-2 border-gray-700 inline-block bg-gray-900">
           {renderGrid()}
         </div>
         <div className="space-y-4">
-          <div className="text-2xl font-bold">Score: {score}</div>
           {isDebugMode && (
             <div className="space-y-2 text-sm">
               <p>Controls:</p>
@@ -171,6 +128,22 @@ export function TetrisDebugView({ isDebugMode = true }: TetrisDebugViewProps) {
               </ul>
             </div>
           )}
+          <div className="bg-gray-800 p-4 rounded">
+            <h3 className="text-white font-bold mb-2">Current State</h3>
+            <pre className="text-xs text-gray-300">
+              {JSON.stringify(
+                {
+                  currentPiece: activePiece ? {
+                    type: activePiece.type,
+                    position: activePiece.position,
+                    rotation: activePiece.rotation
+                  } : null,
+                },
+                null,
+                2
+              )}
+            </pre>
+          </div>
         </div>
       </div>
     </div>

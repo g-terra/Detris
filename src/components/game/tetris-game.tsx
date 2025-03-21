@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { Link } from "react-router-dom"
 import { GameGrid } from "./game-grid"
 import { ScoreDisplay } from "./score-display"
+import { NextPiece } from "./next-piece"
 import { Tetrimino } from "@/lib/tetris/types"
 
 interface TetrisGameProps {
@@ -12,6 +13,8 @@ interface TetrisGameProps {
   showScore?: boolean
   /** Current active piece */
   currentPiece?: Tetrimino | null
+  /** Next piece to appear */
+  nextPiece?: Tetrimino | null
   /** Game board state */
   board?: (0 | 1)[][]
   /** Whether to show debug mode link */
@@ -26,6 +29,7 @@ export function TetrisGame({
   className, 
   showScore = true,
   currentPiece = null,
+  nextPiece = null,
   board = Array(20).fill(0).map(() => Array(10).fill(0)),
   showDebugLink = true
 }: TetrisGameProps) {
@@ -58,6 +62,7 @@ export function TetrisGame({
                 backgroundColor: GAME_COLORS.text,
                 color: GAME_COLORS.background
               }}
+              data-discover
             >
               Debug Mode
             </Link>
@@ -73,6 +78,7 @@ export function TetrisGame({
           {showScore && (
             <div className="space-y-8">
               <ScoreDisplay score={currentScore} />
+              <NextPiece piece={nextPiece} />
             </div>
           )}
         </div>

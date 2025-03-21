@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { TetriminoState, TetriminoType } from '../../lib/tetris/types';
-import { createTetrimino, getNextRotation, moveTetrimino } from '../../lib/tetris/tetriminos';
+import { createTetrimino, moveTetrimino, getRandomTetriminoType } from '../../lib/tetris/factory';
+import { getNextRotation } from '../../lib/tetris/rotation';
 import { PLAYFIELD_HEIGHT, PLAYFIELD_WIDTH, canMove, canRotate } from '../../lib/tetris/validation';
-import { GameGrid } from '../game/game-grid';
-import { NextPiece } from '../game/next-piece';
-import { ScoreDisplay } from '../game/score-display';
 import { TetrisGame } from '../game/tetris-game';
 
 export function GameView() {
@@ -17,8 +15,7 @@ export function GameView() {
 
   // Generate next piece
   const generateNextPiece = useCallback(() => {
-    const types = Object.values(TetriminoType);
-    return types[Math.floor(Math.random() * types.length)] as TetriminoType;
+    return getRandomTetriminoType();
   }, []);
 
   // Spawn a piece

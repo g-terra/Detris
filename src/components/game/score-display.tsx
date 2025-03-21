@@ -13,11 +13,7 @@ export function ScoreDisplay({ score }: ScoreDisplayProps) {
   return (
     <div style={{ color: GAME_COLORS.text }}>
       <div className="text-xl font-bold">SCORE</div>
-      <div 
-        className="font-mono text-2xl"
-        data-testid="score-value"
-        aria-label={`Current score: ${formattedScore}`}
-      >
+      <div className="text-2xl font-mono" data-testid="score-value">
         {formattedScore}
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { GAME_COLORS } from "@/lib/constants/colors";
-import { GameGrid } from "@/components/game/game-grid";
+import { TetrisGame } from "@/components/game/tetris-game";
 import { NextPiece } from "@/components/game/next-piece";
 import { createTetrimino, getRandomTetriminoType } from "@/lib/tetris/factory";
 import { calculateHardDrop, checkCollision } from "@/lib/tetris/collision";
@@ -17,7 +17,6 @@ export default function DebugPage() {
     Array(20).fill(0).map(() => Array(10).fill(0))
   );
 
-  // Create an empty board for collision testing
   const handleRotate = () => {
     const newRotation = ((rotation + 90) % 360) as Rotation;
     setRotation(newRotation);
@@ -94,16 +93,16 @@ export default function DebugPage() {
         </div>
 
         <div className="flex gap-8">
-          <div>
-            <GameGrid 
-              currentPiece={{
-                ...currentPiece,
-                position,
-                rotation
-              }}
-              board={board}
-            />
-          </div>
+          <TetrisGame 
+            showScore={false}
+            showDebugLink={false}
+            currentPiece={{
+              ...currentPiece,
+              position,
+              rotation
+            }}
+            board={board}
+          />
 
           <div className="space-y-8">
             <NextPiece piece={nextPiece} />
