@@ -1,5 +1,6 @@
 import { GAME_COLORS } from "@/lib/constants/colors"
 import { cn } from "@/lib/utils"
+import { Link } from "react-router-dom"
 import { GameGrid } from "./game-grid"
 import { NextPiece } from "./next-piece"
 import { ScoreDisplay } from "./score-display"
@@ -27,20 +28,32 @@ export function TetrisGame({ className }: TetrisGameProps) {
       data-testid="tetris-game"
     >
       <div className="flex flex-col items-center gap-4">
-        <h1 
-          className="text-4xl font-bold mb-4"
-          style={{ color: GAME_COLORS.text }}
-          data-testid="game-title"
-        >
-          DETRIS
-        </h1>
+        <div className="flex items-center gap-4">
+          <h1 
+            className="text-4xl font-bold"
+            style={{ color: GAME_COLORS.text }}
+            data-testid="game-title"
+          >
+            DETRIS
+          </h1>
+          <Link 
+            to="/debug"
+            className="px-3 py-1 rounded text-sm"
+            style={{ 
+              backgroundColor: GAME_COLORS.text,
+              color: GAME_COLORS.background
+            }}
+          >
+            Debug Mode
+          </Link>
+        </div>
         
         <div className="flex gap-8">
           <GameGrid />
           
           <div className="space-y-8">
             <ScoreDisplay score={currentScore} />
-            <NextPiece />
+            <NextPiece piece={null} />
           </div>
         </div>
       </div>

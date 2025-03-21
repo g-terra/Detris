@@ -1,34 +1,107 @@
 import { GAME_COLORS } from "@/lib/constants/colors"
 import { cn } from "@/lib/utils"
+import { Tetrimino, Position } from "@/lib/tetris/types"
+import { TETRIMINO_COLORS } from "@/lib/tetris/constants"
+import { rotateTetrimino } from "@/lib/tetris/rotation"
+import { getGhostPiecePosition, getTetriminoPositions } from "@/lib/tetris/collision"
 
 interface GameGridProps {
   className?: string
+  currentPiece?: Tetrimino | null
+  board?: (0 | 1)[][]
+  showGhost?: boolean
 }
 
 /**
  * Renders the main Tetris game grid with a 10x20 layout
  */
-export function GameGrid({ className }: GameGridProps) {
+export function GameGrid({ 
+  className, 
+  currentPiece, 
+  board = Array(20).fill(0).map(() => Array(10).fill(0)),
+  showGhost = true 
+}: GameGridProps) {
+  const ghostPosition = currentPiece ? getGhostPiecePosition(board, currentPiece) : null
+  const ghostPiece = ghostPosition && currentPiece ? {
+    ...currentPiece,
+    position: ghostPosition
+  } : null
+
   return (
     <div 
-      className={cn("bg-[#1F1F1F] p-4 rounded-lg", className)}
+      className={cn(
+        "relative grid grid-cols-10 gap-0 border-4 rounded-lg",
+        "w-[308px] h-[608px]", // 300px + 8px for borders
+        className
+      )}
+      style={{ 
+        backgroundColor: GAME_COLORS.background,
+        borderColor: GAME_COLORS.text
+      }}
       data-testid="game-grid"
     >
-      <div 
-        className="grid grid-cols-10 grid-rows-20 gap-px w-[300px] h-[600px]"
-        style={{ backgroundColor: GAME_COLORS.secondary }}
-        role="grid"
-        aria-label="Tetris game grid"
-      >
-        {Array.from({ length: 200 }).map((_, i) => (
-          <div 
-            key={i}
-            style={{ backgroundColor: GAME_COLORS.background }}
-            data-testid={`grid-cell-${i}`}
-            role="gridcell"
+      {/* Grid cells */}
+      {board.flat().map((cell, index) => (
+        <div
+          key={index}
+          className="w-[30px] h-[30px] border border-gray-700"
+          data-testid="grid-cell"
+        />
+      ))}
+
+      {/* Ghost piece */}
+      {showGhost && ghostPiece && (
+        getTetriminoPositions(ghostPiece).map((pos, index) => (
+          <div
+            key={`ghost-${index}`}
+            className="absolute w-[30px] h-[30px] border border-gray-700"
+            style={{
+              backgroundColor: GAME_COLORS.secondary,
+              left: `${pos.x * 30}px`,
+              top: `${pos.y * 30}px`
+            }}
+            data-testid="ghost-block"
           />
-        ))}
-      </div>
+        ))
+      )}
+
+      {/* Current piece */}
+      {currentPiece && (
+        rotateTetrimino(currentPiece.shape, currentPiece.rotation).map((row, y) =>
+          row.map((cell, x) =>
+            cell && (
+              <div
+                key={`piece-${x}-${y}`}
+                className="absolute w-[30px] h-[30px] border border-gray-700"
+                style={{
+                  backgroundColor: TETRIMINO_COLORS[currentPiece.type],
+                  left: `${(x + currentPiece.position.x) * 30}px`,
+                  top: `${(y + currentPiece.position.y) * 30}px`
+                }}
+                data-testid="piece-block"
+              />
+            )
+          )
+        )
+      )}
+
+      {/* Placed blocks */}
+      {board.map((row, y) =>
+        row.map((cell, x) =>
+          cell === 1 ? (
+            <div
+              key={`placed-${x}-${y}`}
+              className="absolute w-[30px] h-[30px] border border-gray-700"
+              style={{
+                backgroundColor: GAME_COLORS.cyan,
+                left: `${x * 30}px`,
+                top: `${y * 30}px`
+              }}
+              data-testid="piece-block"
+            />
+          ) : null
+        )
+      )}
     </div>
   )
 } 

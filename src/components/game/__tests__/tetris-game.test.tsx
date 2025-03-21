@@ -1,10 +1,15 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { TetrisGame } from '../tetris-game'
+import { BrowserRouter } from 'react-router-dom'
 
 describe('TetrisGame', () => {
+  const renderWithRouter = (ui: React.ReactNode) => {
+    return render(<BrowserRouter>{ui}</BrowserRouter>)
+  }
+
   it('renders the game layout with all essential elements', () => {
-    render(<TetrisGame />)
+    renderWithRouter(<TetrisGame />)
     
     // Check for game title
     expect(screen.getByTestId('game-title')).toHaveTextContent('DETRIS')
@@ -18,22 +23,19 @@ describe('TetrisGame', () => {
     expect(screen.getByTestId('score-value')).toHaveTextContent('000000')
     
     // Check for next piece preview
-    expect(screen.getByText('NEXT')).toBeInTheDocument()
+    expect(screen.getByText('Next Piece')).toBeInTheDocument()
     expect(screen.getByTestId('next-piece-preview')).toBeInTheDocument()
   })
 
   it('renders the correct number of grid cells', () => {
-    render(<TetrisGame />)
-    
-    // Check for 10x20 grid cells
-    const gridCells = screen.getAllByRole('gridcell')
-    expect(gridCells).toHaveLength(200)
+    renderWithRouter(<TetrisGame />)
+    const cells = screen.getAllByTestId('grid-cell')
+    expect(cells).toHaveLength(200) // 10x20 grid
   })
 
   it('applies custom className when provided', () => {
-    const customClass = 'custom-class'
-    render(<TetrisGame className={customClass} />)
-    
-    expect(screen.getByTestId('tetris-game')).toHaveClass(customClass)
+    renderWithRouter(<TetrisGame className="custom-class" />)
+    const container = screen.getByTestId('tetris-game')
+    expect(container).toHaveClass('custom-class')
   })
 }) 

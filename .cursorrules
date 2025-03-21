@@ -2,45 +2,37 @@
 
 - **Important:** The backend implementation will be developed separately using Java in a dedicated repository. Do not use Next.js for backend logic.
 
+- **Default contect** 
+    - aways refere to the requirements.md file for the base requirements
+    - aways refere to the work-breakdown.md while staring a new feature
+
+
 - **Code Style and Structure**
 
-  - Write concise, technical TypeScript code with accurate examples.
-  - Use functional and declarative programming patterns; avoid classes.
-  - Prefer iteration and modularization over code duplication.
-  - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
-  - Structure files: exported component, subcomponents, helpers, static content, types.
+    - Write concise, technical TypeScript code with accurate examples.
+    - Use functional and declarative programming patterns; avoid classes.
+    - Prefer iteration and modularization over code duplication.
+    - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+    - Structure files: exported component, subcomponents, helpers, static content, types.
 
-- **Testing**
-
-  - Follow Test-Driven Development (TDD) approach:
-    - Write failing tests first (Red phase)
-    - Write minimal code to pass tests (Green phase)
-    - Refactor code while keeping tests green (Refactor phase)
-
-  - Use Vitest and React Testing Library as primary testing tools:
-    - Leverage Vitest's fast, native ESM-based runner
-    - Use `test` and `expect` from Vitest
-    - Take advantage of Vitest's watch mode for TDD
-    - Utilize Vitest's built-in coverage reporting
-    - Use `vi.mock()` for mocking dependencies
 
 - **Naming Conventions**
 
-  - All components should go in src/components and be named like new-component.tsx
-  - Use lowercase with dashes for directories (e.g., components/auth-wizard).
-  - Favor named exports for components.
+    - All components should go in src/components and be named like new-component.tsx
+    - Use lowercase with dashes for directories (e.g., components/auth-wizard).
+    - Favor named exports for components.
 
 - **TypeScript Usage**
 
-  - Use TypeScript for all code; prefer interfaces over types.
-  - Avoid enums; use maps instead.
-  - Use functional components with TypeScript interfaces.
+    - Use TypeScript for all code; prefer interfaces over types.
+    - Avoid enums; use maps instead.
+    - Use functional components with TypeScript interfaces.
 
 - **Syntax and Formatting**
 
-  - Use the "function" keyword for pure functions.
-  - Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
-  - Use declarative JSX.
+    - Use the "function" keyword for pure functions.
+    - Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
+    - Use declarative JSX.
 
 - **UI and Styling**
 
@@ -54,9 +46,9 @@
 
 - **Key Conventions**
 
-  - Use 'nuqs' for URL search parameter state management.
-  - Optimize Web Vitals (LCP, CLS, FID).
-  - Structure your application clearly in the /src directory, separating components and pages.
+    - Use 'nuqs' for URL search parameter state management.
+    - Optimize Web Vitals (LCP, CLS, FID).
+    - Structure your application clearly in the /src directory, separating components and pages.
 
 ## Components Organization
 
@@ -85,3 +77,21 @@ Example:
 - **Shared Components:** The `/src/components` folder should contain reusable components used across multiple pages or features.
 - **Modular Approach:** Adopt a modular structure, where each feature or domain has its own folder containing components, hooks, and utilities specific to that feature.
 
+- **Testing**
+
+    - Follow Test-Driven Development (TDD)
+    - Write failing tests before each new feature (Red phase)
+    - Write minimal code to pass tests (Green phase)
+    - Refactor code while keeping tests green (Refactor phase)
+    - Use Vitest and React Testing Library as primary testing tools
+    - Leverage Vitest's fast, native ESM-based runner
+    - Use `test` and `expect` from Vitest
+    - Take advantage of Vitest's watch mode for TDD
+    - Utilize Vitest's built-in coverage reporting
+    - Use `vi.mock()` for mocking dependencies
+
+
+- **Gitflow**
+
+    - every new feature goes inside a feature branch e.g feature/my-new-feat
+    - branch names can be found in the work-breakdown.md file in the project root
