@@ -21,10 +21,20 @@ export function GameGrid({
   board = Array(20).fill(0).map(() => Array(10).fill(0)),
   showGhost = true 
 }: GameGridProps) {
-  const ghostPosition = currentPiece ? getGhostPiecePosition(board, currentPiece) : null
-  const ghostPiece = ghostPosition && currentPiece ? {
+  // Create empty grid cells
+  const gridCells = Array.from({ length: 20 }).map((_, y) => 
+    Array.from({ length: 10 }).map((_, x) => (
+      <div
+        key={`${x}-${y}`}
+        className="w-[30px] h-[30px] border border-gray-700"
+      />
+    ))
+  )
+
+  // Calculate ghost piece position if we have a current piece
+  const ghostPiece = currentPiece ? {
     ...currentPiece,
-    position: ghostPosition
+    position: getGhostPiecePosition(board, currentPiece)
   } : null
 
   return (
@@ -38,56 +48,47 @@ export function GameGrid({
         backgroundColor: GAME_COLORS.background,
         borderColor: GAME_COLORS.text
       }}
-      data-testid="game-grid"
     >
       {/* Grid cells */}
-      {board.flat().map((cell, index) => (
-        <div
-          key={index}
-          className="w-[30px] h-[30px] border border-gray-700"
-          data-testid="grid-cell"
-        />
-      ))}
+      {gridCells}
 
       {/* Ghost piece */}
-      {showGhost && ghostPiece && (
-        getTetriminoPositions(ghostPiece).map((pos, index) => (
-          <div
-            key={`ghost-${index}`}
-            className="absolute w-[30px] h-[30px] border border-gray-700"
-            style={{
-              backgroundColor: GAME_COLORS.secondary,
-              left: `${pos.x * 30}px`,
-              top: `${pos.y * 30}px`
-            }}
-            data-testid="ghost-block"
-          />
-        ))
-      )}
+      {showGhost && ghostPiece && rotateTetrimino(ghostPiece.shape, ghostPiece.rotation).flatMap((row, y) =>
+        row.map((cell, x) => 
+          cell ? (
+            <div
+              key={`ghost-${x}-${y}`}
+              className="absolute w-[30px] h-[30px] border border-gray-700"
+              style={{
+                backgroundColor: GAME_COLORS.secondary,
+                left: `${(x + ghostPiece.position.x) * 30}px`,
+                top: `${(y + ghostPiece.position.y) * 30}px`
+              }}
+            />
+          ) : null
+        )
+      ).filter(Boolean)}
 
       {/* Current piece */}
-      {currentPiece && (
-        rotateTetrimino(currentPiece.shape, currentPiece.rotation).map((row, y) =>
-          row.map((cell, x) =>
-            cell && (
-              <div
-                key={`piece-${x}-${y}`}
-                className="absolute w-[30px] h-[30px] border border-gray-700"
-                style={{
-                  backgroundColor: TETRIMINO_COLORS[currentPiece.type],
-                  left: `${(x + currentPiece.position.x) * 30}px`,
-                  top: `${(y + currentPiece.position.y) * 30}px`
-                }}
-                data-testid="piece-block"
-              />
-            )
-          )
+      {currentPiece && rotateTetrimino(currentPiece.shape, currentPiece.rotation).flatMap((row, y) =>
+        row.map((cell, x) => 
+          cell ? (
+            <div
+              key={`piece-${x}-${y}`}
+              className="absolute w-[30px] h-[30px] border border-gray-700"
+              style={{
+                backgroundColor: TETRIMINO_COLORS[currentPiece.type],
+                left: `${(x + currentPiece.position.x) * 30}px`,
+                top: `${(y + currentPiece.position.y) * 30}px`
+              }}
+            />
+          ) : null
         )
-      )}
+      ).filter(Boolean)}
 
       {/* Placed blocks */}
-      {board.map((row, y) =>
-        row.map((cell, x) =>
+      {board.flatMap((row, y) =>
+        row.map((cell, x) => 
           cell === 1 ? (
             <div
               key={`placed-${x}-${y}`}
@@ -97,11 +98,10 @@ export function GameGrid({
                 left: `${x * 30}px`,
                 top: `${y * 30}px`
               }}
-              data-testid="piece-block"
             />
           ) : null
         )
-      )}
+      ).filter(Boolean)}
     </div>
   )
 } 

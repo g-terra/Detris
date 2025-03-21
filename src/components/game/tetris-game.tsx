@@ -2,26 +2,40 @@ import { GAME_COLORS } from "@/lib/constants/colors"
 import { cn } from "@/lib/utils"
 import { Link } from "react-router-dom"
 import { GameGrid } from "./game-grid"
-import { NextPiece } from "./next-piece"
 import { ScoreDisplay } from "./score-display"
+import { Tetrimino } from "@/lib/tetris/types"
 
 interface TetrisGameProps {
   /** Optional className for styling the container */
   className?: string
+  /** Whether to show the score display */
+  showScore?: boolean
+  /** Current active piece */
+  currentPiece?: Tetrimino | null
+  /** Game board state */
+  board?: (0 | 1)[][]
+  /** Whether to show debug mode link */
+  showDebugLink?: boolean
 }
 
 /**
  * Main Tetris game component that combines the game grid, score display,
  * and next piece preview in a retro Game Boy style layout
  */
-export function TetrisGame({ className }: TetrisGameProps) {
+export function TetrisGame({ 
+  className, 
+  showScore = true,
+  currentPiece = null,
+  board = Array(20).fill(0).map(() => Array(10).fill(0)),
+  showDebugLink = true
+}: TetrisGameProps) {
   // In the future, these will come from game state
   const currentScore = 0
 
   return (
     <div 
       className={cn(
-        "flex flex-col items-center justify-center min-h-screen",
+        "flex flex-col items-center justify-center",
         className
       )}
       style={{ backgroundColor: GAME_COLORS.background }}
@@ -36,25 +50,31 @@ export function TetrisGame({ className }: TetrisGameProps) {
           >
             DETRIS
           </h1>
-          <Link 
-            to="/debug"
-            className="px-3 py-1 rounded text-sm"
-            style={{ 
-              backgroundColor: GAME_COLORS.text,
-              color: GAME_COLORS.background
-            }}
-          >
-            Debug Mode
-          </Link>
+          {showDebugLink && (
+            <Link 
+              to="/debug"
+              className="px-3 py-1 rounded text-sm"
+              style={{ 
+                backgroundColor: GAME_COLORS.text,
+                color: GAME_COLORS.background
+              }}
+            >
+              Debug Mode
+            </Link>
+          )}
         </div>
         
         <div className="flex gap-8">
-          <GameGrid />
+          <GameGrid 
+            currentPiece={currentPiece}
+            board={board}
+          />
           
-          <div className="space-y-8">
-            <ScoreDisplay score={currentScore} />
-            <NextPiece piece={null} />
-          </div>
+          {showScore && (
+            <div className="space-y-8">
+              <ScoreDisplay score={currentScore} />
+            </div>
+          )}
         </div>
       </div>
     </div>
